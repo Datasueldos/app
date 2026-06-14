@@ -58,6 +58,42 @@ document.addEventListener("DOMContentLoaded", function() {
             --main-color-light: #f0f9ff;
             --border-input: #e2e8f0;
         }
+        /* PALETA PREMIUM FIJA: Sincronizada con la barra superior de la web */
+:root {
+    --main-color: #38bdf8 !important;       /* Celeste brillante del ticker para los focos */
+    --main-color-light: #f0f9ff !important; /* Fondo suave azulado para selección */
+}
+
+/* Modificación de los Casilleros (Inputs y Selects) */
+select, input {
+    border: 1px solid #cbd5e1 !important;   /* Borde gris suave neutro por defecto */
+    background-color: #f8fafc !important;   /* Fondo limpio */
+    transition: all 0.2s ease;
+}
+
+/* Cuando el usuario toca un casillero, se ilumina en celeste estético, NUNCA rojo */
+select:focus, input:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+    background-color: #ffffff !important;
+}
+
+/* El Botón "Simular Sueldo" pasa a ser una pieza corporativa premium */
+.btn-calc, button[onclick="calcularSueldoCompleto()"] {
+    background-color: #0f172a !important;   /* El mismo azul oscuro/negro de arriba */
+    color: #ffffff !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 12px !important;         /* Bordes redondeados más finos y modernos */
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Efecto visual cuando pasás el dedo o el mouse por encima del botón */
+.btn-calc:hover, button[onclick="calcularSueldoCompleto()"]:hover {
+    background-color: #1e293b !important;   /* Se aclara levemente de forma elegante */
+}
+        
 
         *, *::before, *::after {
             box-sizing: border-box;
