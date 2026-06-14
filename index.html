@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <head>
     <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -538,6 +539,60 @@ select:focus, input:focus {
             color: var(--text-muted);
             text-align: justify;
         }
+        /* --- NUEVOS ESTILOS PARA LA PANTALLA DE INICIO --- */
+#pantalla-inicio {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: #dde5ed; /* El fondo gris/azulado de tu foto */
+    min-height: 100vh;
+    padding-bottom: 20px;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+.header-top h2 { margin: 0; font-size: 20px; font-weight: 800; color: #0f172a; }
+.header-top i { font-size: 22px; color: #0f172a; cursor: pointer; }
+
+.encabezado-inicio { text-align: center; margin-bottom: 30px; }
+.encabezado-inicio h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.2; }
+.encabezado-inicio p { color: #475569; font-size: 15px; margin: 0; }
+
+.grilla-rubros {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+.tarjeta-rubro {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.tarjeta-rubro:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+.tarjeta-rubro i { font-size: 30px; color: #0f172a; margin-bottom: 15px; }
+.tarjeta-rubro span { font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+.tarjeta-rubro.proximamente { opacity: 0.9; }
+
+.lo-mas-buscado { text-align: center; margin-bottom: 30px; }
+.lo-mas-buscado h3 { font-size: 13px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+.caja-buscado { background: #ffffff; height: 120px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
+.footer-inicio {
+    text-align: center; font-size: 11px; color: #64748b; margin-top: 20px; padding-top: 20px; border-top: 1px solid #cbd5e1;
+}
     </style>
 </head>
 <body>
