@@ -164,6 +164,66 @@ select:focus, input:focus {
             box-sizing: border-box;
         }
 
+        </style>
+</head>
+<body>
+
+<div id="pantalla-home">
+    <div class="home-header">
+        <h1 class="home-logo">Data<span>Sueldo</span></h1>
+        <p class="home-subtitle">Encuentra tu Referencia Salarial en Argentina. Fácil, rápido y actualizado.</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-box" id="buscador-puestos" placeholder="Ej: Vigilador, Cajero, Mozo, Administrativo...">
+    </div>
+
+    <div class="rubros-grid">
+        <div class="rubro-card" onclick="mostrarRubro('seguridad')">
+            <span class="rubro-icon">🛡️</span>
+            <span class="rubro-title">SEGURIDAD PRIVADA</span>
+            <span class="rubro-status">● Actualizado</span>
+        </div>
+
+        <div class="rubro-card" onclick="mostrarRubro('proximamente', 'Comercio y Servicios')">
+            <span class="rubro-icon">🛒</span>
+            <span class="rubro-title">COMERCIO Y SERVICIOS</span>
+            <span class="rubro-status prox">Próximamente</span>
+        </div>
+
+        <div class="rubro-card" onclick="mostrarRubro('proximamente', 'Gastronomía')">
+            <span class="rubro-icon">🍴</span>
+            <span class="rubro-title">GASTRONOMÍA</span>
+            <span class="rubro-status prox">Próximamente</span>
+        </div>
+
+        <div class="rubro-card" onclick="mostrarRubro('proximamente', 'Construcción')">
+            <span class="rubro-icon">🏗️</span>
+            <span class="rubro-title">CONSTRUCCIÓN</span>
+            <span class="rubro-status prox">Próximamente</span>
+        </div>
+
+        <div class="rubro-card" onclick="mostrarRubro('proximamente', 'Administración')">
+            <span class="rubro-icon">💼</span>
+            <span class="rubro-title">ADMINISTRACIÓN</span>
+            <span class="rubro-status prox">Próximamente</span>
+        </div>
+
+        <div class="rubro-card" onclick="mostrarRubro('proximamente', 'Transporte')">
+            <span class="rubro-icon">🚚</span>
+            <span class="rubro-title">TRANSPORTE</span>
+            <span class="rubro-status prox">Próximamente</span>
+        </div>
+    </div>
+</div>
+
+<div id="contenedor-volver" class="hidden" style="max-width: 580px; margin: 20px auto 0 auto; padding: 0 15px;">
+    <button class="btn-volver" onclick="volverAHome()">← Volver a Rubros</button>
+</div>
+
+<div id="seccion-simuladores" class="hidden">
+    
+        
         body {
             background-color: var(--bg-global);
             color: var(--text-main);
@@ -1165,5 +1225,41 @@ select:focus, input:focus {
         obtenerCotizacionesEnVivo();
     };
 </script>
+    </div> <script>
+// Funciones de navegación de DataSueldo
+function mostrarRubro(rubro, nombreRubro) {
+    if (rubro === 'seguridad') {
+        document.getElementById('pantalla-home').classList.add('hidden');
+        document.getElementById('seccion-simuladores').classList.remove('hidden');
+        document.getElementById('contenedor-volver').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert('El simulador de ' + nombreRubro + ' se está actualizando con las últimas paritarias y estará disponible muy pronto.');
+    }
+}
+
+function volverAHome() {
+    document.getElementById('seccion-simuladores').classList.add('hidden');
+    document.getElementById('contenedor-volver').classList.add('hidden');
+    document.getElementById('pantalla-home').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Buscador predictivo básico para la Home
+document.getElementById('buscador-puestos')?.addEventListener('input', function(e) {
+    let busqueda = e.target.value.toLowerCase().trim();
+    let tarjetas = document.querySelectorAll('.rubro-card');
+    
+    tarjetas.forEach(tarjeta => {
+        let texto = tarjeta.textContent.toLowerCase();
+        if (texto.includes(busqueda)) {
+            tarjeta.style.display = "flex";
+        } else {
+            tarjeta.style.display = "none";
+        }
+    });
+});
+    </script>
+    
 </body>
 </html>
