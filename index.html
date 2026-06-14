@@ -93,6 +93,71 @@ select:focus, input:focus {
 .btn-calc:hover, button[onclick="calcularSueldoCompleto()"]:hover {
     background-color: #1e293b !important;   /* Se aclara levemente de forma elegante */
 }
+
+        /* ========================================================= */
+/* REDISEÑO VISUAL PREMIUM: MENOS BLANCO, MÁS PROFUNDIDAD  */
+/* ========================================================= */
+
+/* 1. Oscurecemos el fondo de la pantalla para que las tarjetas blancas resalten */
+:root {
+    --bg-global: #f1f5f9 !important; /* Gris azulado sutil estilo Homebanking */
+}
+
+/* 2. Le damos forma de "Tarjeta Flotante" real al contenedor principal */
+.container {
+    background: #ffffff !important;
+    border-radius: 24px !important;
+    margin: 15px auto 25px auto !important; /* Separación estética arriba y abajo */
+    padding: 30px 20px !important;
+    box-shadow: 0 12px 40px -10px rgba(15, 23, 42, 0.08) !important; /* Sombra suave profunda */
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* 3. Estilizado de la botonera de pestañas (Tabs) como una App Móvil */
+.tabs-nav {
+    background-color: #cbd5e1 !important; /* Fondo contenedor gris para los botones */
+    padding: 6px !important;
+    border-radius: 16px !important;
+    margin: 20px auto !important;
+    display: flex !important;
+    gap: 6px !important;
+}
+.tab-btn {
+    background-color: transparent !important; /* Botón inactivo transparente */
+    color: #475569 !important;
+    border-radius: 12px !important;
+    padding: 12px 8px !important;
+    font-size: 13px !important;
+    flex: 1 !important;
+}
+.tab-btn.active {
+    background-color: #0f172a !important; /* Botón activo resalta en oscuro */
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15) !important;
+}
+
+/* 4. Estilo cebreado para las filas de resultados (Fácil lectura) */
+.result-row {
+    padding: 14px 10px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    margin-bottom: 2px !important;
+}
+.result-row:nth-child(odd) {
+    background-color: #f8fafc !important; /* Intercala una fila blanca y una gris claro */
+}
+
+/* 5. Toque de diseño a la tabla de Escalas Salariales */
+.table-container {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+}
+.table-scales th {
+    background-color: #f1f5f9 !important; /* Encabezado de tabla más marcado */
+    color: #1e293b !important;
+}
         
 
         *, *::before, *::after {
