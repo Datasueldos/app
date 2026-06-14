@@ -3,50 +3,45 @@
 <head>
     <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Buscamos el input del monto a convertir
-    // Intentamos encontrarlo por placeholders comunes si no tiene ID único
     const inputs = document.querySelectorAll("input");
     
     inputs.forEach(input => {
-        // Identificamos si es el casillero del conversor
         let esConversor = input.placeholder && (input.placeholder.includes("Monto") || input.placeholder.includes("000")) || input.id.includes("monto") || input.id.includes("conversor");
         
         if (esConversor) {
-            // PASO 1: Lo cambiamos a tipo texto para que permita dibujar los puntos de miles libremente
             input.type = "text";
-            input.inputMode = "numeric"; // Esto hace que en el celu se siga abriendo el teclado numérico
+            input.inputMode = "numeric"; 
             
-            // PASO 2: Controlamos lo que escribe el usuario
             input.addEventListener("input", function(e) {
-                // Quitamos todo lo que no sea número
+                // 1. Limpiamos dejando SOLO números
                 let valorLimpio = e.target.value.replace(/\D/g, "");
                 
-                if (valorLimpio === "") {
+                // 2. Si el usuario borró todo, lo dejamos vacío y evitamos que salte a 1000
+                if (valorLimpio === "" || valorLimpio === "0") {
                     e.target.value = "";
-                    // Si tenías una función que calcula, la reseteamos en 0
                     if (typeof calcularConversion === "function") calcularConversion(0);
                     if (typeof actualizarConversor === "function") actualizarConversor(0);
+                    if (typeof convertirMoneda === "function") convertirMoneda(0);
                     return;
                 }
                 
-                let numero = parseInt(valorLimpio, 10);
+                // Usamos BigInt en lugar de parseInt para soportar números gigantescos sin errores de memoria
+                let numeroGrande = BigInt(valorLimpio);
                 
-                // Dibujamos el número con puntos de miles perfectos (Estilo Argentina)
-                e.target.value = numero.toLocaleString("es-AR");
+                // 3. Formateamos con puntos de miles estilo Argentina sin importar el largo
+                e.target.value = numeroGrande.toLocaleString("es-AR");
                 
-                // PASO 3: Le pasamos el número limpio a las funciones de tu código para que calculen el dólar/real
-                // Probamos con los nombres de funciones más comunes que suelen usarse:
-                if (typeof calcularConversion === "function") calcularConversion(numero);
-                if (typeof actualizarConversor === "function") actualizarConversor(numero);
-                if (typeof convertirMoneda === "function") convertirMoneda(numero);
-                
-                // Desparamos el evento nativo por si tu código viejo usaba un 'change' o 'input' directo
-                input.setAttribute('data-valor-puro', numero);
+                // Pasamos el número limpio convertido a número normal para los cálculos de tu app
+                let numeroParaCalcular = Number(numeroGrande);
+                if (typeof calcularConversion === "function") calcularConversion(numeroParaCalcular);
+                if (typeof actualizarConversor === "function") actualizarConversor(numeroParaCalcular);
+                if (typeof convertirMoneda === "function") convertirMoneda(numeroParaCalcular);
             });
         }
     });
 });
-</script>
+    </script>
+    
 
 
     <meta charset="UTF-8">
