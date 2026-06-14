@@ -6,41 +6,36 @@ document.addEventListener("DOMContentLoaded", function() {
     const inputs = document.querySelectorAll("input");
     
     inputs.forEach(input => {
-        let esConversor = input.placeholder && (input.placeholder.includes("Monto") || input.placeholder.includes("000")) || input.id.includes("monto") || input.id.includes("conversor");
+        // Transformamos los inputs a texto para permitir puntos infinitos
+        input.type = "text";
+        input.inputMode = "numeric"; 
         
-        if (esConversor) {
-            input.type = "text";
-            input.inputMode = "numeric"; 
+        input.addEventListener("input", function(e) {
+            let valorLimpio = e.target.value.replace(/\D/g, "");
             
-            input.addEventListener("input", function(e) {
-                // 1. Limpiamos dejando SOLO números
-                let valorLimpio = e.target.value.replace(/\D/g, "");
-                
-                // 2. Si el usuario borró todo, lo dejamos vacío y evitamos que salte a 1000
-                if (valorLimpio === "" || valorLimpio === "0") {
-                    e.target.value = "";
-                    if (typeof calcularConversion === "function") calcularConversion(0);
-                    if (typeof actualizarConversor === "function") actualizarConversor(0);
-                    if (typeof convertirMoneda === "function") convertirMoneda(0);
-                    return;
-                }
-                
-                // Usamos BigInt en lugar de parseInt para soportar números gigantescos sin errores de memoria
-                let numeroGrande = BigInt(valorLimpio);
-                
-                // 3. Formateamos con puntos de miles estilo Argentina sin importar el largo
-                e.target.value = numeroGrande.toLocaleString("es-AR");
-                
-                // Pasamos el número limpio convertido a número normal para los cálculos de tu app
-                let numeroParaCalcular = Number(numeroGrande);
-                if (typeof calcularConversion === "function") calcularConversion(numeroParaCalcular);
-                if (typeof actualizarConversor === "function") actualizarConversor(numeroParaCalcular);
-                if (typeof convertirMoneda === "function") convertirMoneda(numeroParaCalcular);
-            });
-        }
+            if (valorLimpio === "" || valorLimpio === "0") {
+                e.target.value = "";
+                if (typeof calcularConversion === "function") calcularConversion(0);
+                if (typeof actualizarConversor === "function") actualizarConversor(0);
+                if (typeof convertirMoneda === "function") convertirMoneda(0);
+                return;
+            }
+            
+            // BigInt evita que el número se rompa o se resetee al pasar el millón
+            let numeroGrande = BigInt(valorLimpio);
+            e.target.value = numeroGrande.toLocaleString("es-AR");
+            
+            let numeroParaCalcular = Number(numeroGrande);
+            if (typeof calcularConversion === "function") calcularConversion(numeroParaCalcular);
+            if (typeof actualizarConversor === "function") actualizarConversor(numeroParaCalcular);
+            if (typeof convertirMoneda === "function") convertirMoneda(numeroParaCalcular);
+            
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
     });
 });
-    </script>
+</script>
+
     
 
 
