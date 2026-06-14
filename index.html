@@ -2,46 +2,36 @@
 <html lang="es">
 <head>
     <script>
-// Desactivamos la función vieja para que deje de recortar los números altos
-window.formatInputMilesEnteros = function(input) { return; };
-
 document.addEventListener("DOMContentLoaded", function() {
-    const inputs = document.querySelectorAll("input");
+    const convMonto = document.getElementById("convMonto");
     
-    inputs.forEach(input => {
-        // Filtro inteligente: solo actuamos si es el conversor de monedas
-        let esConversor = input.placeholder && (input.placeholder.includes("Monto") || input.placeholder.includes("000")) || input.id.includes("monto") || input.id.includes("conversor");
+    if (convMonto) {
+        convMonto.type = "text";
+        convMonto.inputMode = "numeric";
         
-        if (esConversor) {
-            input.type = "text";
-            input.inputMode = "numeric"; 
+        convMonto.addEventListener("input", function(e) {
+            // 1. Limpiamos el texto dejando solo los números enteros
+            let valorLimpio = e.target.value.replace(/\D/g, "");
             
-            input.addEventListener("input", function(e) {
-                let valorLimpio = e.target.value.replace(/\D/g, "");
-                
-                if (valorLimpio === "" || valorLimpio === "0") {
-                    e.target.value = "";
-                    if (typeof calcularConversion === "function") calcularConversion(0);
-                    if (typeof actualizarConversor === "function") actualizarConversor(0);
-                    if (typeof convertirMoneda === "function") convertirMoneda(0);
-                    return;
-                }
-                
-                // Usamos BigInt para darle capacidad infinita de millones
-                let numeroGrande = BigInt(valorLimpio);
-                e.target.value = numeroGrande.toLocaleString("es-AR");
-                
-                let numeroParaCalcular = Number(numeroGrande);
-                if (typeof calcularConversion === "function") calcularConversion(numeroParaCalcular);
-                if (typeof actualizarConversor === "function") actualizarConversor(numeroParaCalcular);
-                if (typeof convertirMoneda === "function") convertirMoneda(numeroParaCalcular);
-                
-                input.dispatchEvent(new Event('change', { bubbles: true }));
-            });
-        }
-    });
+            if (valorLimpio === "" || valorLimpio === "0") {
+                e.target.value = "";
+                if (typeof calcularConversion === "function") calcularConversion();
+                return;
+            }
+            
+            // 2. BigInt para soportar millones infinitos sin resetearse
+            let numeroGrande = BigInt(valorLimpio);
+            e.target.value = numeroGrande.toLocaleString("es-AR");
+            
+            // 3. Forzamos a que tu función nativa calcule el cambio en base al número real
+            if (typeof calcularConversion === "function") {
+                calcularConversion();
+            }
+        });
+    }
 });
 </script>
+
 
 
     
@@ -752,7 +742,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div><label>Tengo:</label><select id="convOrigen" onchange="calcularConversion()"><option value="ARS">Pesos ($)</option><option value="USD">Dólares (US$)</option><option value="BRL">Reales (R$)</option></select></div>
             <div><label>Quiero:</label><select id="convDestino" onchange="calcularConversion()"><option value="USD" selected>Dólares (US$)</option><option value="ARS">Pesos ($)</option><option value="BRL">Reales (R$)</option></select></div>
         </div>
-        <div class="form-group"><label>Monto a convertir:</label><input type="text" id="convMonto" placeholder="Ej: 10.000" oninput="formatInputDecimalesMixto(this); calcularConversion();"></div>
+        <div class="form-group"><label>Monto a convertir:</label><input type="text" id="convMonto" placeholder="Ej: 10.000"></div>
         <div class="results" id="convResultados" style="display: none;"><div class="total-box bg-conversor-box"><div class="total-main" style="color: #4c1d95; font-size: 22px;"><span id="convResultadoFinal">$ 0</span></div></div></div>
     </div>
 </div>
