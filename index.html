@@ -2,56 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Sueldos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- ESTILOS VINTAGE PROFESIONAL --- */
+        /* Paleta Vintage Profesional */
         :root {
-            --fondo: #f4f1ea;        /* Tono crema vintage */
-            --texto: #1e3a5a;        /* Azul petróleo */
-            --tarjeta: #ffffff;      /* Blanco roto */
-            --borde: #dcd6cc;        /* Arena */
+            --fondo: #f9f7f2;        /* Pergamino suave */
+            --texto: #2c3e50;        /* Gris carbón profundo */
+            --borde: #d1ccc0;        /* Borde envejecido */
+            --acento: #8b7355;       /* Tono bronce/madera para iconos */
         }
 
-        body { background-color: var(--fondo); color: var(--texto); font-family: 'Georgia', serif; margin: 0; padding: 0; }
+        body { 
+            background-color: var(--fondo); 
+            color: var(--texto); 
+            font-family: 'Times New Roman', serif; /* Fuente con estilo clásico */
+            margin: 0; padding: 0; 
+        }
         
-        /* Contenedores */
         .seccion { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
         
-        /* Cabecera */
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid var(--borde); padding-bottom: 20px; }
+        .header h1 { font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .header p { font-style: italic; color: #57606f; }
         
-        /* Botones Rubros */
         .grilla-rubros { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .tarjeta-rubro { background: var(--tarjeta); border: 1px solid var(--borde); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .tarjeta-rubro:hover { border-color: var(--texto); transform: translateY(-3px); }
-        .tarjeta-rubro i { font-size: 28px; color: var(--texto); margin-bottom: 10px; display: block; }
-        .tarjeta-rubro span { font-size: 11px; font-weight: bold; text-transform: uppercase; display: block; }
-        .leyenda { font-size: 9px; color: #7f8c8d; margin-top: 5px; text-transform: uppercase; }
+        .tarjeta-rubro { 
+            background: #ffffff; 
+            border: 1px solid var(--borde); 
+            padding: 25px 15px; 
+            border-radius: 4px; /* Bordes rectos para un look más clásico */
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .tarjeta-rubro:hover { border-color: var(--acento); background: #fdfdfd; }
+        .tarjeta-rubro i { font-size: 30px; color: var(--acento); margin-bottom: 15px; display: block; }
+        .tarjeta-rubro span { font-size: 13px; font-weight: 900; text-transform: uppercase; display: block; letter-spacing: 0.5px; }
+        
+        .leyenda { font-size: 8px; color: #a4b0be; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Simulador */
         #modulo-seguridad { display: none; }
-        .btn-volver { background: none; border: 1px solid var(--texto); padding: 8px 16px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-bottom: 20px; }
+        .btn-volver { background: none; border: 1px solid var(--texto); padding: 10px 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE INICIO -->
     <div id="pantalla-inicio" class="seccion">
         <div class="header">
             <h1>Data Sueldos</h1>
-            <p>Simulador de sueldos. Fácil, rápido y sencillo.</p>
+            <p>Simulador de haberes. Precisión y transparencia.</p>
         </div>
 
         <div class="grilla-rubros">
-            <!-- BOTÓN ACTIVO -->
             <div class="tarjeta-rubro" onclick="abrirModulo('seguridad')">
                 <i class="fa-solid fa-shield-halved"></i> <span>Seguridad Privada</span>
             </div>
-            
-            <!-- BOTONES PRÓXIMAMENTE -->
             <div class="tarjeta-rubro">
                 <i class="fa-solid fa-cart-shopping"></i> <span>Comercio</span>
                 <div class="leyenda">Próximamente</div>
@@ -75,23 +82,19 @@
         </div>
     </div>
 
-    <!-- MÓDULO SEGURIDAD PRIVADA -->
     <div id="modulo-seguridad" class="seccion">
         <button class="btn-volver" onclick="irA('inicio')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
-        <h2>Seguridad Privada</h2>
-        <!-- AQUÍ IREMOS AGREGANDO LAS ESCALAS Y EL CÁLCULO -->
-        <p>Seleccioná tu antigüedad para calcular el sueldo.</p>
+        <h2 style="text-transform: uppercase; border-bottom: 1px solid var(--borde);">Seguridad Privada</h2>
+        <p>Configuración de escala salarial en proceso...</p>
     </div>
 
     <script>
-        // Navegación modular
         function abrirModulo(rubro) {
             if(rubro === 'seguridad') {
                 document.getElementById('pantalla-inicio').style.display = 'none';
                 document.getElementById('modulo-seguridad').style.display = 'block';
             }
         }
-
         function irA(seccion) {
             if(seccion === 'inicio') {
                 document.getElementById('pantalla-inicio').style.display = 'block';
