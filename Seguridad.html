@@ -1061,6 +1061,87 @@
         .table-scales th {
             background: #f3f5f7;
         }
+
+        /* Modal de aviso legal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.55);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 220ms ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            width: min(720px, calc(100% - 40px));
+            max-height: 90vh;
+            overflow: auto;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 24px 80px rgba(2,6,23,0.45);
+            transform: translateY(12px) scale(0.99);
+            transition: transform 260ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease;
+            color: var(--text-main);
+            border: 1px solid rgba(15,23,42,0.06);
+        }
+
+        .modal-overlay.show .modal-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .modal-card p, .modal-card ol {
+            color: var(--text-soft);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 0;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .modal-accept {
+            background: linear-gradient(135deg, #1f3a5f, #334155);
+            color: #fff;
+        }
+
+        .modal-cancel {
+            background: transparent;
+            border: 1px solid rgba(15,23,42,0.08);
+            color: var(--text-main);
+        }
+
+        @media (max-width: 480px) {
+            .modal-card { padding: 16px; border-radius: 12px; }
+            .modal-actions { flex-direction: column-reverse; }
+        }
     </style>
 </head>
 
@@ -1073,7 +1154,7 @@
     <!-- Simulador de sueldos -->
     <main>
         <section class="container" aria-labelledby="titulo-simulador">
-            <h1 id="titulo-simulador">Simulá tu sueldo</h1>
+            <h1 id="titulo-simulador">Simula una referencia</h1>
 
             <p class="intro-herramienta">
                 Calculá tu sueldo estimado de forma rápida y sencilla. Diseñamos esta herramienta para que el personal en actividad y los nuevos postulantes tengan una referencia clara de los ingresos en el sector. Tené en cuenta que los resultados son de carácter informativo y aproximado, basados en las escalas de los convenios vigentes.
@@ -1115,14 +1196,14 @@
                 </div>
             </div>
 
-            <button class="btn-calc" type="button" id="btnCalcular">Simular Sueldo</button>
+            <button class="btn-calc" type="button" id="btnCalcular">Simular referencia</button>
 
             <p class="aviso-simulacion">
                 * Aviso: Los resultados de esta simulación son puramente orientativos y no representan una liquidación oficial, recibo de sueldo ni obligación contractual. Los montos finales pueden variar según las condiciones particulares de cada empresa, antigüedad o adicionales específicos.
             </p>
 
-            <!-- Resultados activos -->
-            <section class="results" aria-label="Resultados del simulador">
+            <!-- Resultados activos (ocultos hasta aceptación) -->
+            <section class="results" id="resultadosSection" aria-label="Resultados del simulador" style="display:none;" aria-hidden="true">
                 <div class="result-row"><span>Sueldo Básico:</span> <span id="resBasico">$ 0</span></div>
                 <div class="result-row"><span>Antigüedad:<small id="lblAntiguedad">(1% del básico por año)</small></span> <span id="resAntiguedad">$ 0</span></div>
                 <div class="result-row"><span>Presentismo:</span> <span id="resPresentismo">$ 0</span></div>
@@ -1150,77 +1231,6 @@
                 <div class="result-row"><span>Valor Diario:</span> <span id="resValorDiario">$ 0</span></div>
                 <div class="result-row"><span>Vacaciones Correspondientes:</span> <span id="resVacaciones">14 días</span></div>
                 <div class="result-row"><span>Plus Vacacional Extra:</span> <span id="resPlusVacaciones">$ 0</span></div>
-            </section>
-
-            <!-- Guía del recibo de sueldo -->
-            <section class="info-section" aria-labelledby="titulo-recibo">
-                <h2 id="titulo-recibo">Guía interactiva: Tu Recibo de Sueldo</h2>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Fecha de Ingreso</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Es el día formal en que se inicia la relación laboral en relación de dependencia. Este dato determina legalmente la <strong>antigüedad acumulada</strong> del trabajador (base para el cálculo de adicionales salariales por año de servicio) y define la cantidad de días que corresponden por <strong>vacaciones anuales ordinarias</strong> según la normativa vigente.
-                    </div>
-                </article>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Conceptos Remunerativos</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Son aquellos ingresos que forman parte del salario habitual (Sueldo Básico, Presentismo, Horas Extras, adicionales por Convenio) y que están sujetos a un <strong>17% de retenciones de ley</strong> destinadas a la seguridad social. El desglose normativo obligatorio se compone de:
-                        <ul>
-                            <li><strong>11% - Sistema Integrado Previsional Argentino (Jubilación).</strong></li>
-                            <li><strong>3% - Obra Social (Cobertura médico-asistencial).</strong></li>
-                            <li><strong>3% - Instituto Nacional de Servicios Sociales para Jubilados y Pensionados (PAMI - Ley 19.032).</strong></li>
-                        </ul>
-                        Asimismo, estos conceptos constituyen la base legal para el cálculo del Sueldo Anual Complementario (Aguinaldo), plus vacacional e indemnizaciones.
-                    </div>
-                </article>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Conceptos No Remunerativos</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Son asignaciones económicas que percibe el trabajador pero que <strong>no están sujetas a aportes ni contribuciones previsionales</strong>; es decir, no sufren la retención del 17%. Generalmente comprenden viáticos con comprobantes (Art. 106 LCT), asignaciones familiares otorgadas por ANSES, indemnizaciones o sumas extraordinarias acordadas transitoriamente en negociaciones paritarias.
-                    </div>
-                </article>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Haberes</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Representan el conjunto total de retribuciones y asignaciones monetarias devengadas a favor del empleado durante el período liquidado, derivadas de la prestación de sus servicios. En la estructura del recibo de sueldo, es la columna donde se asientan individualmente todos los conceptos (tanto remunerativos como no remunerativos) antes de aplicar las deducciones.
-                    </div>
-                </article>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Sueldo Bruto</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Es la <strong>remuneración total devengada</strong> por el trabajador antes de efectuarse las retenciones impositivas, previsionales o sindicales. Matemáticamente, equivale a la sumatoria de todos los conceptos reflejados en la columna de haberes. Es el valor de referencia utilizado formalmente para establecer las escalas salariales en los convenios colectivos de trabajo.
-                    </div>
-                </article>
-
-                <article class="accordion-item">
-                    <button class="accordion-header" type="button">
-                        <span>Sueldo Neto</span>
-                        <span class="accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        Es la remuneración líquida percibida efectivamente por el trabajador, la cual se deposita en la cuenta sueldo bancaria. Se calcula tomando el <strong>Sueldo Bruto y deduciendo el 17% de aportes obligatorios de ley</strong> (Jubilación, Obra Social y PAMI) junto con las retenciones sindicales o convencionales que correspondan en cada caso particular.
-                    </div>
-                </article>
             </section>
 
             <!-- Escalas salariales -->
@@ -1258,6 +1268,25 @@
     <footer class="legal-footer">
         <strong>Aviso de exención de responsabilidad:</strong> El simulador de sueldos, las estimaciones de escalas salariales y la información general provistas en esta plataforma web tienen un propósito estrictamente ilustrativo, orientativo e informativo. Ninguno de los resultados generados constituye una liquidación oficial, recibo formal de haberes ni asesoramiento legal vinculante. Los administradores del sitio no se hacen responsables bajo ninguna circunstancia por el uso, decisiones tomadas, interpretaciones o posibles discrepancias que surjan de la utilización de estos datos frente a liquidaciones reales del sector. Para confirmaciones legales o gremiales, consulte de forma directa con su respectiva entidad gremial o profesionales idóneos del área laboral.
     </footer>
+
+    <!-- Modal de aviso legal (oculto hasta activación) -->
+    <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display:none;">
+        <div class="modal-card" role="document">
+            <h3 id="modalTitle">⚠️ AVISO IMPORTANTE</h3>
+            <p>Por favor, lea atentamente antes de continuar. Al utilizar este simulador, usted comprende y acepta de forma expresa los siguientes términos:</p>
+            <ol>
+                <li><strong>Naturaleza del Sitio:</strong> Este sitio web es una herramienta de acceso libre e independiente. No es un canal oficial, no emite recibos de sueldo válidos y no constituye una liquidación legal de haberes.</li>
+                <li><strong>Uso de Inteligencia Artificial:</strong> La plataforma utiliza procesos automatizados e inteligencia artificial para generar estimaciones orientativas.</li>
+                <li><strong>Carácter Referencial:</strong> Los cálculos proporcionados tienen carácter exclusivamente orientativo. Las escalas salariales, adicionales, aportes o convenios utilizados como referencia pueden encontrarse en proceso de actualización.</li>
+                <li><strong>Limitación de Responsabilidad:</strong> Los resultados emitidos por el simulador constituyen únicamente una referencia informativa y no reemplazan el asesoramiento profesional ni una liquidación oficial.</li>
+            </ol>
+            <p>Para obtener una liquidación oficial o asesoramiento específico, consulte con un profesional competente o con la entidad correspondiente.</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" id="modalCancel">No deseo continuar con la simulación</button>
+                <button class="modal-btn modal-accept" id="modalAccept">Acepto los términos, calcular referencia</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Lógica activa del simulador -->
     <script>
@@ -1381,6 +1410,44 @@
             }
         };
 
+        // Estado de aceptación del aviso legal
+        let avisoAceptado = false;
+
+        const modalOverlay = $("#avisoModal");
+        const modalAcceptBtn = $("#modalAccept");
+        const modalCancelBtn = $("#modalCancel");
+
+        function showModal() {
+            if (!modalOverlay) return;
+            modalOverlay.style.display = "flex";
+            // allow CSS transition
+            requestAnimationFrame(() => modalOverlay.classList.add('show'));
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            if (!modalOverlay) return;
+            modalOverlay.classList.remove('show');
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 260);
+        }
+
+        function showResults() {
+            const sec = document.getElementById('resultadosSection');
+            if (!sec) return;
+            sec.style.display = '';
+            sec.removeAttribute('aria-hidden');
+        }
+
+        function hideResults() {
+            const sec = document.getElementById('resultadosSection');
+            if (!sec) return;
+            sec.style.display = 'none';
+            sec.setAttribute('aria-hidden', 'true');
+        }
+
         function formatearMilesInput(input) {
             const valor = input.value.replace(/\./g, "").replace(/\D/g, "");
             input.value = valor ? valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
@@ -1436,8 +1503,6 @@
                 option.textContent = item.nombre;
                 elementos.categoria.appendChild(option);
             });
-
-            calcularSueldo();
         }
 
         function calcularSueldo() {
@@ -1513,13 +1578,21 @@
 
         function inicializarEventos() {
             elementos.convenio.addEventListener("change", actualizarConvenio);
-            elementos.categoria.addEventListener("change", calcularSueldo);
-            elementos.btnCalcular.addEventListener("click", calcularSueldo);
+            elementos.categoria.addEventListener("change", () => { if (avisoAceptado) calcularSueldo(); });
+
+            elementos.btnCalcular.addEventListener("click", (e) => {
+                if (avisoAceptado) {
+                    calcularSueldo();
+                    showResults();
+                } else {
+                    showModal();
+                }
+            });
 
             [elementos.antiguedad, elementos.horasNocturnas, elementos.horas50, elementos.horas100].forEach((input) => {
                 input.addEventListener("input", () => {
                     formatearMilesInput(input);
-                    calcularSueldo();
+                    if (avisoAceptado) calcularSueldo();
                 });
             });
 
@@ -1531,6 +1604,19 @@
 
             $$(".mini-btn").forEach((boton) => {
                 boton.addEventListener("click", () => cambiarTablaInformativa(boton.dataset.table));
+            });
+
+            // Modal button actions
+            if (modalAcceptBtn) modalAcceptBtn.addEventListener('click', () => {
+                avisoAceptado = true;
+                hideModal();
+                calcularSueldo();
+                showResults();
+            });
+
+            if (modalCancelBtn) modalCancelBtn.addEventListener('click', () => {
+                // cancelar y redirigir
+                window.location.href = "https://www.google.com";
             });
         }
 
